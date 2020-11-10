@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,gh/nexmoe/nexmoe.github.io@latest/lib/mdui_043tiny/css/mdui.css,gh/nexmoe/nexmoe.github.io@latest/lib/iconfont/iconfont.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css?v=233" crossorigin>
   
-  <link rel="stylesheet" href="/css/style.css?v=1604833581140">
+  <link rel="stylesheet" href="/css/style.css?v=1605027517293">
 <meta name="generator" content="Hexo 5.2.0"></head>
 
 <body class="mdui-drawer-body-left">
@@ -47,9 +47,9 @@
         </a>
     </div>
     <div class="nexmoe-count">
-        <div><span>Articles</span>3</div>
-        <div><span>Tags</span>0</div>
-        <div><span>Categories</span>1</div>
+        <div><span>Articles</span>4</div>
+        <div><span>Tags</span>1</div>
+        <div><span>Categories</span>2</div>
     </div>
     <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
         
@@ -119,6 +119,13 @@
         
 
         <li class="category-list-item">
+          <a class="category-list-link" href="/categories/big-data/">big data</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
           <a class="category-list-link" href="/categories/web/">web</a>
           <span class="category-list-count">1</span>
         </li>
@@ -132,12 +139,19 @@
 
   
   
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/python/" style="font-size: 10px;">python</a>
+    </div>
+    
+  </div>
+
   
   
   <div class="nexmoe-widget-wrap">
     <h3 class="nexmoe-widget-title">Archive</h3>
     <div class="nexmoe-widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -163,6 +177,90 @@
   <div id="nexmoe-content">
     <div class="nexmoe-primary">
         <section class="nexmoe-posts">
+    
+    <div class="nexmoe-post">
+        <a href="/2020/11/10/%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow/">
+            
+                <div class="nexmoe-post-cover mdui-ripple" style="padding-bottom: 66.66666666666666%;"> 
+                    <img data-src="/images/bc1.jpg" data-sizes="auto" alt="时间序列预测-tensorflow" class="lazyload">
+                    <h1>时间序列预测-tensorflow</h1>
+                </div>
+            
+        </a>
+
+        <div class="nexmoe-post-meta nexmoe-rainbow">
+            <a><i class="nexmoefont icon-calendar-fill"></i>2020年11月10日</a>
+            <a><i class="nexmoefont icon-areachart"></i>410 字</a>
+            <a><i class="nexmoefont icon-time-circle-fill"></i>大概 2 分钟</a>
+        </div>
+
+        <article>
+            
+                <p>基于时间序列的数据预测-tensorflow2-LTSM</p>
+<pre><code>在网络上有很多关于股票等的预测案例。参考这些案例，预测一个贷款余额的测试，不知是否能够成功。
+开始，使用的环境是ubuntu desktop lts 20.04 anconda tensorflow2.2 python3.7等环境。</code></pre>
+<p>0.导入库</p>
+<pre><code>import tensorflow as tf
+import sklearn</code></pre>
+<p>1.数据处理</p>
+<p>1.1导入数据//</p>
+<pre><code>df=pd.read_csv(&#39;datasorce/zgdata.csv&#39;)</code></pre>
+<p>1.2选取数据列/选取单一数据列</p>
+<pre><code>sigal_fe=[&#39;gxdk&#39;]
+uni_data=df[sigal_fe]</code></pre>
+<p>1.3数据归一化处理</p>
+<pre><code>train_df=uni_data[:TRAIN_SPLIT]
+test_df=uni_data[TRAIN_SPLIT+1:]
+
+sc=preprocessing.MinMaxScaler(feature_range=(0, 1))
+train_sc=sc.fit_transform(train_df)
+test_sc=sc.transform(test_df)</code></pre>
+<p>1.4变量定义</p>
+<pre><code>x_train = []
+y_train = []
+x_test = []
+y_test = []</code></pre>
+<p>1.5构造训练集、测试集</p>
+<p>1.5.1训练集</p>
+<pre><code>for i in range(11, len(train_df)):
+    x_train.append(train_sc[i - 11:i, 0])
+    y_train.append(train_sc[i, 0])
+
+np.random.seed(7)
+np.random.shuffle(x_train)
+np.random.seed(7)
+np.random.shuffle(y_train)
+tf.random.set_seed(7)
+
+x_train, y_train = np.array(x_train), np.array(y_train)
+x_train = np.reshape(x_train, (x_train.shape[0], 11, 1))</code></pre>
+<p>1.5.2测试集</p>
+<pre><code>for i in range(11, len(test_sc)):
+    x_test.append(test_sc[i - 11:i, 0])
+    y_test.append(test_sc[i, 0])
+
+ x_test, y_test = np.array(x_test), np.array(y_test)
+x_test = np.reshape(x_test, (x_test.shape[0], 11, 1))</code></pre>
+<p>1.6建立模型    </p>
+<pre><code>   model = tf.keras.Sequential([
+    tf.keras.layers.LSTM(80, return_sequences=True),
+     tf.keras.layers.Dropout(0.2),
+     tf.keras.layers.LSTM(100),
+     tf.keras.layers.Dropout(0.2),
+     tf.keras.layers.Dense(1)
+])</code></pre>
+<p>1.7编译模型，指定误差函数</p>
+<pre><code>model.compile(optimizer=tf.keras.optimizers.Adam(0.001),
+          loss=&#39;mean_squared_error&#39;)  # 损失函数用均方误差</code></pre>
+<p>1.8开始训练数据</p>
+<pre><code>  history = model.fit(x_train, y_train, batch_size=64, epochs=50, validation_data=(x_test, y_test),validation_freq=1)</code></pre>
+<p>1.9预测数据，利用测试数据集</p>
+<pre><code>predicted_stock_price = model.predict(x_test)    </code></pre>
+<p>1.10比较模型好坏，利用plt 画出图像的比较。</p>
+
+            
+        </article>
+    </div>
     
     <div class="nexmoe-post">
         <a href="/2020/11/05/aiecl/">
@@ -269,7 +367,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
- <script src="/js/app.js?v=1604833581176"></script>
+ <script src="/js/app.js?v=1605027517366"></script>
 
   
 
