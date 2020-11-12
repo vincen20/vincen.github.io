@@ -1,204 +1,128 @@
-<!DOCTYPE html>
-
-<html lang="CN">
-
+<!doctype html>
+<html lang="zh-CN">
 <head>
-  
-  <title>时间序列预测-tensorflow-1 - MR VLiu&#39;S Blog</title>
-  <meta charset="UTF-8">
-  <meta name="description" content="这是代码托管在github的个人博客+wx   vincen20">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-  
-  
+    <meta charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
+    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
+    
+    <title>时间序列预测-tensorflow-1 | MR VLiu&#39;S Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
+    <meta name="keywords" content="hexo,  Web," >
+    <meta name="description" content="vincen hexo 个人前端小站" >
 
-  <link rel="shortcut icon" href="/favicon.ico" type="image/png" />
-  <meta name="description" content="基于时间序列的数据预测-tensorflow2-LTSM 在网络上有很多关于股票等的预测案例。参考这些案例，预测一个贷款余额的测试，不知是否能够成功。    开始，使用的环境是ubuntu desktop lts 20.04 anconda tensorflow2.2 python3.7等环境。 0.导入库 import tensorflow as tf import sklearn 1.数据处理">
-<meta property="og:type" content="article">
-<meta property="og:title" content="时间序列预测-tensorflow-1">
-<meta property="og:url" content="http://vincen.top/2020/11/10/%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow/index.html">
-<meta property="og:site_name" content="MR VLiu&#39;S Blog">
-<meta property="og:description" content="基于时间序列的数据预测-tensorflow2-LTSM 在网络上有很多关于股票等的预测案例。参考这些案例，预测一个贷款余额的测试，不知是否能够成功。    开始，使用的环境是ubuntu desktop lts 20.04 anconda tensorflow2.2 python3.7等环境。 0.导入库 import tensorflow as tf import sklearn 1.数据处理">
-<meta property="og:locale">
-<meta property="article:published_time" content="2020-11-10T10:57:00.000Z">
-<meta property="article:modified_time" content="2020-11-11T14:52:02.278Z">
-<meta property="article:author" content="vincen20">
-<meta property="article:tag" content="python">
-<meta name="twitter:card" content="summary">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,gh/nexmoe/nexmoe.github.io@latest/lib/mdui_043tiny/css/mdui.css,gh/nexmoe/nexmoe.github.io@latest/lib/iconfont/iconfont.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css?v=233" crossorigin>
-  
-  <link rel="stylesheet" href="/css/style.css?v=1605190391788">
+    
+    <link rel="alternative" href="/atom.xml" title="MR VLiu&#39;S Blog" type="application/atom+xml" >
+    
+    
+    <link rel="shortcut icon" href="/" >
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!--[if lt IE 9]>
+    
+<script src="/js/html5.js"></script>
+
+    <![endif]-->
+    
+
 <meta name="generator" content="Hexo 5.2.0"></head>
 
-<body class="mdui-drawer-body-left">
-  
-  <div id="nexmoe-background">
-    <div class="nexmoe-bg" style="background-image: url(/images/bc1.jpg)"></div>
-    <div class="mdui-appbar mdui-shadow-0">
-      <div class="mdui-toolbar">
-        <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
-        <div class="mdui-toolbar-spacer"></div>
-        <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
-        <a href="/" title="vincen20" class="mdui-btn mdui-btn-icon"><img src="/images/icon1.jpg" alt="vincen20"></a>
-       </div>
+<body class="home">
+    <!--[if lt IE 9]>
+    <div class="browsehappy">
+        当前网页 <strong>不支持</strong>
+        你正在使用的浏览器. 为了正常的访问, 请 <a target="_blank" rel="noopener" href="http://browsehappy.com/">升级你的浏览器</a>.
     </div>
-  </div>
-  <div id="nexmoe-header">
-      <div class="nexmoe-drawer mdui-drawer" id="drawer">
-    <div class="nexmoe-avatar mdui-ripple">
-        <a href="/" title="vincen20">
-            <img src="/images/icon1.jpg" alt="vincen20" alt="vincen20">
-        </a>
-    </div>
-    <div class="nexmoe-count">
-        <div><span>Articles</span>5</div>
-        <div><span>Tags</span>2</div>
-        <div><span>Categories</span>2</div>
-    </div>
-    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
-        
-        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/" title="回到首页">
-            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
-            <div class="mdui-list-item-content">
-                回到首页
+    <![endif]-->
+
+    <!-- 博客头部 -->
+    <header class="header">
+    <section class="container header-main">
+        <div class="logo">
+            <a href="/">
+                <div class="cover">
+                    <span class="name">MR VLiu&#39;S Blog</span>
+                    <span class="description">个人博客</span>
+                </div>
+            </a>
+        </div>
+        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
+        <ul class="menu hidden" id="JELON__menu">
+            
+            <li rel="/2020/11/10/%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow/index.html" class="item ">
+                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
+            </li>
+            
+            <li rel="/2020/11/10/%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow/index.html" class="item ">
+                <a href="/archives/" title="文章归档" class="icon-container">&nbsp;文章归档</a>
+            </li>
+            
+            <li rel="/2020/11/10/%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow/index.html" class="item ">
+                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
+            </li>
+            
+            <li rel="/2020/11/10/%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow/index.html" class="item ">
+                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
+            </li>
+            
+            <li rel="/2020/11/10/%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow/index.html" class="item ">
+                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
+            </li>
+            
+        </ul>
+        <div class="profile clearfix">
+            <div class="feeds fl">
+                
+                
+                <p class="links">
+                    
+                        <a href="https://github.com/vincen20" target="_blank">Blog on Github</a>
+                        |
+                    
+                        <a href="" target="_blank"></a>
+                        
+                    
+                </p>
+                <p class="sns">
+                    
+                        <a href="https://space.bilibili.com/237165882/" class="infos" target="_blank"><b>■</b> bilibili</a>
+                    
+                    <a href="javascript: void(0);" class="wechat">
+                        <b>■</b>
+                        公众号
+                        <span class="popover">
+                            <img src="/img/wechat_mp.jpg" width="150" height="150" alt="我的微信订阅号">
+                            <i class="arrow"></i>
+                        </span>
+                    </a>
+                </p>
+                
             </div>
-        </a>
-        
-        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/archives" title="文章归档">
-            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
-            <div class="mdui-list-item-content">
-                文章归档
+            <div class="avatar fr">
+                <img src="/img/vincen.jpg" alt="avatar" title="Jelon" >
             </div>
-        </a>
-        
-        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/about.html" title="关于博客">
-            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
-            <div class="mdui-list-item-content">
-                关于博客
-            </div>
-        </a>
-        
-        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/donate.html" title="看好我">
-            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
-            <div class="mdui-list-item-content">
-                看好我
-            </div>
-        </a>
-        
-    </div>
-    <aside id="nexmoe-sidebar">
-  
-  <div class="nexmoe-widget-wrap">
-    <div class="nexmoe-widget nexmoe-search">
-        <form id="search_form" action_e="https://cn.bing.com/search?q=site:vincen.top" onsubmit="return search();">
-            <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
-        </form>
-    </div>
-</div>
-  
-  <div class="nexmoe-widget-wrap">
-    <div class="nexmoe-widget nexmoe-social">
-        <a class="mdui-ripple" href="https://space.bilibili.com/237165882/" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
-            <i class="nexmoefont icon-bilibili"></i>
-        </a><a class="mdui-ripple" href="https://github.com/vincen20/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
-            <i class="nexmoefont icon-github"></i>
-        </a><a class="mdui-ripple" href="/atom.xml" target="_blank" mdui-tooltip="{content: 'RSS'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
-            <i class="nexmoefont icon-rss"></i>
-        </a>
-    </div>
-</div>
-  
-  
-  <div class="nexmoe-widget-wrap">
-    <h3 class="nexmoe-widget-title">Categories</h3>
-    <div class="nexmoe-widget">
-
-      <ul class="category-list">
-
-        
+        </div>
+    </section>
+</header>
 
 
-        
-
-        
-
-        <li class="category-list-item">
-          <a class="category-list-link" href="/categories/big-data/">big data</a>
-          <span class="category-list-count">1</span>
-        </li>
-
-        
-
-        <li class="category-list-item">
-          <a class="category-list-link" href="/categories/web/">web</a>
-          <span class="category-list-count">1</span>
-        </li>
-
-        
-      </ul>
-
-    </div>
-  </div>
-
-
-  
-  
-  <div class="nexmoe-widget-wrap">
-    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
-      <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 10px;">树莓派</a>
-    </div>
-    
-  </div>
-
-  
-  
-  <div class="nexmoe-widget-wrap">
-    <h3 class="nexmoe-widget-title">Archive</h3>
-    <div class="nexmoe-widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">5</span></li></ul>
-    </div>
-  </div>
-
-
-<style>
-.nexmoe-widget .archive-list-count{
-	position : absolute;
-	right: 15px;
-	top:9px;
-	color: #DDD;
-}
-</style>
-
-  
-</aside>
-    <div class="nexmoe-copyright">
-        &copy; 2020 vincen20
-        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
-    </div>
-</div><!-- .nexmoe-drawer -->
-  </div>
-  <div id="nexmoe-content">
-    <div class="nexmoe-primary">
-        <div class="nexmoe-post">
-  
-      <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
-          <img data-src="/images/bc1.jpg" data-sizes="auto" alt="时间序列预测-tensorflow-1" class="lazyload">
-          <h1>时间序列预测-tensorflow-1</h1>
-      </div>
-  
-  
-  <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2020年11月10日</a>
-    <a><i class="nexmoefont icon-areachart"></i>410 字</a>
-    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 2 分钟</a>
-</div>
-
-  <div class="nexmoe-post-right">
-    
-  </div>
-
-  <article>
-    <p>基于时间序列的数据预测-tensorflow2-LTSM</p>
+    <!-- 博客正文 -->
+    <div class="container body clearfix">
+        <section class="content">
+            <div class="content-main widget">
+                <!-- 文章页 -->
+<!-- 文章 -->
+<article class="post article">
+    <header class="text-center">
+        <h3 class="post-title"><span>时间序列预测-tensorflow-1</span></h3>
+    </header>
+    <p class="post-meta text-center">
+        vincen20 发表于
+        <time datetime="2020-11-10T10:57:00.000Z">2020-11-10</time>
+    </p>
+    <div class="post-content">
+        <p>基于时间序列的数据预测-tensorflow2-LTSM</p>
 <p>在网络上有很多关于股票等的预测案例。参考这些案例，预测一个贷款余额的测试，不知是否能够成功。<br>    开始，使用的环境是ubuntu desktop lts 20.04 anconda tensorflow2.2 python3.7等环境。</p>
 <p>0.导入库</p>
 <pre><code>import tensorflow as tf
@@ -259,69 +183,240 @@ x_test = np.reshape(x_test, (x_test.shape[0], 11, 1))</code></pre>
 <pre><code>predicted_stock_price = model.predict(x_test)    </code></pre>
 <p>1.10比较模型好坏，利用plt 画出图像的比较。</p>
 
-  </article>
+    </div>
+    <p class="post-meta">
+        <span class="post-cat">分类：
+            <a class="cat-link" href="/categories/big-data/">big data</a>
+        </span>
+        <span class="post-tags">
+            标签：
+            
+    
+        <a href="/tags/python/" title="python">python</a>
+    
 
-  
-    
-  <div class="nexmoe-post-copyright">
-    <strong>Author：</strong>vincen20<br>
-    <strong>Link：</strong><a href="http://vincen.top/2020/11/10/%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow/" title="http:&#x2F;&#x2F;vincen.top&#x2F;2020&#x2F;11&#x2F;10&#x2F;%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;vincen.top&#x2F;2020&#x2F;11&#x2F;10&#x2F;%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow&#x2F;</a><br>
-    
-      <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
-    
-  </div>
+        </span>
+    </p>
+</article>
+<!-- 分享按钮 -->
 
-
-  
-  
-  <div class="nexmoe-post-meta nexmoe-rainbow">
-    
-        <a class="nexmoefont icon-appstore-fill -link" href="/categories/big-data/">big data</a>
-    
-    
-        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/python/" rel="tag">python</a>
-    
-</div>
-
-  <div class="nexmoe-post-footer">
-    <section class="nexmoe-comment">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.5.0/dist/gitalk.min.css">
-<div id="gitalk"></div>
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1.5.0/dist/gitalk.min.js"></script>
-<script type="text/javascript">
-    var gitalk = new Gitalk({
-        clientID: '1d9db78a71b9f7acfa7b',
-        clientSecret: '4e46a6a364717dd949ec80b95ea16870becf1987',
-        id: window.location.pathname,
-        repo: 'gtalksys.github.io',
-        owner: 'vincen20',
-        admin: 'vincen20'
-    })
-    gitalk.render('gitalk')
-</script>
-</section>
-  </div>
-</div>
+  <div class="article-share clearfix text-center">
+    <div class="share-area">
+      <span class="share-txt">分享到：</span>
+      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
+      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
+      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
+      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
+      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,gh/highlightjs/cdn-release@9.15.8/build/highlight.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
-<script>
-	hljs.initHighlightingOnLoad();
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 
 
-<script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
- <script src="/js/app.js?v=1605190391828"></script>
+<!-- 上一篇/下一篇 -->
+
+<div class="article-nav clearfix">
+    
+    <span class="prev fl">
+        上一篇<br >
+        <a href="/2020/11/11/pyspider/">
+            
+                树莓派安装pyspider
+            
+        </a>
+    </span>
+    
+
+    
+    <span class="next fr">
+        下一篇<br >
+        <a href="/2020/11/05/aiecl/">
+            
+                搭建基于hexo的个人博客
+            
+        </a>
+    </span>
+    
+</div>
+
+<!-- 文章评论 -->
 
   
+<script src="/js/comment.js"></script>
+
+  <div id="comments" class="comment">
+    <!--
+    <div class="sign-bar">
+      GitHub 已登录!
+      <span class="sign-link">登出</span>
+    </div>
+    <section class="box">
+      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
+      <div class="com-text">
+        <div class="main">
+          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
+          <div class="text-area-preview"></div>
+        </div>
+        <div class="switch">
+          <div class="switch-item on">编辑</div>
+          <div class="switch-item">预览</div>
+        </div>
+        <div class="button">提交</div>
+      </div>
+    </section>
+    <section class="tips">注：评论支持 markdown 语法！</section>
+    <section class="list-wrap">
+      <ul class="list">
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">张德龙</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like liked">已赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">333333</div>
+          </div>
+        </li>
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">刘德华</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like">点赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">vvvvv</div>
+          </div>
+        </li>
+      </ul>
+      <div class="page-nav">
+        <a href="javascript: void(0);" class="item">1</a>
+        <a href="javascript: void(0);" class="item">2</a>
+        <a href="javascript: void(0);" class="item current">3</a>
+      </div>
+    </section>
+    -->
+  </div>
+  <script>
+  JELON.Comment({
+    container: 'comments',
+    label: '时间序列预测-tensorflow' || '2020/11/10/时间序列预测-tensorflow/',
+    owner: 'vincen20',
+    repo: 'gtalksys.github.io',
+    clientId: '1d9db78a71b9f7acfa7b',
+    clientSecret: '4e46a6a364717dd949ec80b95ea16870becf1987'
+  });
+  </script>
 
 
+            </div>
 
+        </section>
+        <!-- 侧栏部分 -->
+<aside class="sidebar">
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章搜索</strong></h3>
+        <div class="search-form">
+  <form
+    id="searchForm"
+    method="GET"
+    action="https://www.baidu.com/s"
+    ectype="application/x-www-form-urlencoded"
+    target="_blank"
+    autocomplete="false"
+    onsubmit="javascript: return false;">
+    <input
+      id="searchKeyword"
+      type="text"
+      class="form-control"
+      placeholder="输入关键字搜索"
+      autocomplete="false"
+    />
+    <input id="searchKeywordHidden" type="hidden" name="wd" />
+    <input id="searchButton" class="btn" type="submit" value="搜索" />
+  </form>
+</div>
+    </section>
+    
 
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章分类</strong></h3>
+        <!-- 文章分类 -->
+<ul class="widget-bd">
+    
+    <li>
+        <a href="/categories/web/">web</a>
+        <span class="badge">(1)</span>
+    </li>
+    
+    <li>
+        <a href="/categories/big-data/">big data</a>
+        <span class="badge">(1)</span>
+    </li>
+    
+</ul>
+    </section>
+
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>热门标签</strong></h3>
+        <!-- 文章标签 -->
+<div class="widget-bd tag-wrap">
+  
+    <a class="tag-item" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" title="树莓派">树莓派 (1)</a>
+  
+    <a class="tag-item" href="/tags/python/" title="python">python (2)</a>
+  
+</div>
+    </section>
+    
+
+    
+
+    
+    <!-- 友情链接 -->
+    <section class="widget">
+        <h3 class="widget-hd"><strong>友情链接</strong></h3>
+        <!-- 文章分类 -->
+<ul class="widget-bd">
+    
+        <li>
+            <a href="https://vincen.top" target="_blank" title="Github博客">Github博客</a>
+        </li>
+    
+</ul>
+    </section>
+    
+</aside>
+<!-- / 侧栏部分 -->
+    </div>
+
+    <!-- 博客底部 -->
+    <footer class="footer">
+    &copy;
+    
+        2016-2020
+    
+
+    <a href="/">Jelon Loves You</a>
+</footer>
+<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+
+    <!--博客js脚本 -->
+    <!-- 这里放网站js脚本 -->
+
+<script src="/js/main.js?v=1605202475094.js"></script>
 
 </body>
-
 </html>
