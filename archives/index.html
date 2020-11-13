@@ -159,29 +159,6 @@
             
                 <p>树莓派安装pyspider</p>
 <p>安装pyspider 目的，通过该爬虫，获取一些关注的网站的更新信息，然后通过罗微信进行推送。pyspider 使用起来比较容易，比scrapy简单，直接使用的是网页上调试，编程序。<br>测试的树莓派是 3b+ 系统是 stretch<br>armv7 python3.5</p>
-<p>1.直接运行指令,系统会自动下载依赖的包。</p>
-<pre><code>pip3 install pyspider</code></pre>
-<p> tips：从下载来看，pip3下载了 tornado, lxml, MarkupSafe, Jinja2, tblib, pycurl, itsdangerous, Werkzeug, click, Flask, cssselect, chardet, pyquery, u-msgpack-python, defusedxml, PyYAML, json5, six, wsgidav, certifi, idna, urllib3, requests, Flask-Login, pyspider等库，比较多。<br> &lt;&gt;但是都是从<a target="_blank" rel="noopener" href="http://www.piwheels.org站点上下载的,速度就是10k/s%EF%BC%8C%E7%A8%8D%E5%BE%AE%E4%B8%80%E4%B8%AA%E8%BF%90%E6%B0%94%E4%B8%8D%E5%A5%BD%E5%B0%B1%E6%98%AF">www.piwheels.org站点上下载的，速度就是10k/s，稍微一个运气不好就是</a> timeout’，这个可以通过2种方式来修改，一是直接使用pip -i参数，指定下载的镜像站点。二是在当前用户目录下（linux测试）mkdir .pip/pip.conf 然后搜索下网页，手动指定下载站点。不用说都明白这两种方式的优缺点，一是零时性的，二是针对当前用户生效的。具体的配置可以通过搜索引擎找到，pip 国内源等关键字。参考：</p>
-<pre><code> 清华大学：https://pypi.tuna.tsinghua.edu.cn/simple
-阿里云：http://mirrors.aliyun.com/pypi/simple/
-豆瓣：http://pypi.douban.com/simple/
-
-pip3 install pyspider -i https://pypi.tuna.tsinghua.edu.cn/simple</code></pre>
-<p> 2.安装时候出现的错误<br>   2.1显示红色的文字就是出错了，根据原因，再次重复执行安装命令即可，直到pyspider成功运行。<br>   2.2安装称成功后，运行pyspider，提示bash: pyspider: command not found。解决方法1搜索了下，部分网上提示首卸载后从新安装。我测试了从新运行命令，重新启动板子，无效。在测试在指令前增加sudo ，成功解决该问题。<br>   2.3在数据pyspider后，又出现了  - Deprecated option ‘domaincontroller’: use ‘http_authenticator.domain_controller’ instead.<br>错误。 第二次遇到这个问题，大概率都是安装的包wsgidav的版本太高，pyspider没有更新？猜测。解决方法就是降低 依赖包的版本。</p>
-<pre><code>pip3 unstall wsgidav
-pip3 install wsgidav==2.4.1</code></pre>
-<p>   方案2<br>   在安装包中找到pyspider的资源包，然后找到webui文件里面的webdav.py文件打开，修改第209行即可。，文件路径根据提示修改。</p>
-<p>把</p>
-<pre><code>&#39;domaincontroller&#39;: NeedAuthController(app),</code></pre>
-<p>修改为：</p>
-<pre><code>&#39;http_authenticator&#39;:&#123;
-        &#39;HTTPAuthenticator&#39;:NeedAuthController(app),
-    &#125;,</code></pre>
-<p>  2.4又遇到的问题为    from werkzeug.wsgi import DispatcherMiddleware<br>ImportError: cannot import name ‘DispatcherMiddleware’<br>  还是包的版本高了…<br>  解决方式是</p>
-<pre><code>  pip3 uninstall werkzeug -y
-pip3 install werkzeug==0.16.1</code></pre>
-<p>  安装结束后，运行pyspider 正常。<br>  后续安装phantomjs</p>
-
             
             <p class="more">
                 <a href="https://vincen.top/2020/11/11/pyspider/">阅读剩下更多</a>
@@ -233,65 +210,6 @@ pip3 install werkzeug==0.16.1</code></pre>
             
                 <p>基于时间序列的数据预测-tensorflow2-LTSM</p>
 <p>在网络上有很多关于股票等的预测案例。参考这些案例，预测一个贷款余额的测试，不知是否能够成功。<br>    开始，使用的环境是ubuntu desktop lts 20.04 anconda tensorflow2.2 python3.7等环境。</p>
-<p>0.导入库</p>
-<pre><code>import tensorflow as tf
-import sklearn</code></pre>
-<p>1.数据处理</p>
-<p>1.1导入数据//</p>
-<pre><code>df=pd.read_csv(&#39;datasorce/zgdata.csv&#39;)</code></pre>
-<p>1.2选取数据列/选取单一数据列</p>
-<pre><code>sigal_fe=[&#39;gxdk&#39;]
-uni_data=df[sigal_fe]</code></pre>
-<p>1.3数据归一化处理</p>
-<pre><code>train_df=uni_data[:TRAIN_SPLIT]
-test_df=uni_data[TRAIN_SPLIT+1:]
-
-sc=preprocessing.MinMaxScaler(feature_range=(0, 1))
-train_sc=sc.fit_transform(train_df)
-test_sc=sc.transform(test_df)</code></pre>
-<p>1.4变量定义</p>
-<pre><code>x_train = []
-y_train = []
-x_test = []
-y_test = []</code></pre>
-<p>1.5构造训练集、测试集</p>
-<p>1.5.1训练集</p>
-<pre><code>for i in range(11, len(train_df)):
-    x_train.append(train_sc[i - 11:i, 0])
-    y_train.append(train_sc[i, 0])
-
-np.random.seed(7)
-np.random.shuffle(x_train)
-np.random.seed(7)
-np.random.shuffle(y_train)
-tf.random.set_seed(7)
-
-x_train, y_train = np.array(x_train), np.array(y_train)
-x_train = np.reshape(x_train, (x_train.shape[0], 11, 1))</code></pre>
-<p>1.5.2测试集</p>
-<pre><code>for i in range(11, len(test_sc)):
-    x_test.append(test_sc[i - 11:i, 0])
-    y_test.append(test_sc[i, 0])
-
- x_test, y_test = np.array(x_test), np.array(y_test)
-x_test = np.reshape(x_test, (x_test.shape[0], 11, 1))</code></pre>
-<p>1.6建立模型    </p>
-<pre><code>   model = tf.keras.Sequential([
-    tf.keras.layers.LSTM(80, return_sequences=True),
-     tf.keras.layers.Dropout(0.2),
-     tf.keras.layers.LSTM(100),
-     tf.keras.layers.Dropout(0.2),
-     tf.keras.layers.Dense(1)
-])</code></pre>
-<p>1.7编译模型，指定误差函数</p>
-<pre><code>model.compile(optimizer=tf.keras.optimizers.Adam(0.001),
-          loss=&#39;mean_squared_error&#39;)  # 损失函数用均方误差</code></pre>
-<p>1.8开始训练数据</p>
-<pre><code>  history = model.fit(x_train, y_train, batch_size=64, epochs=50, validation_data=(x_test, y_test),validation_freq=1)</code></pre>
-<p>1.9预测数据，利用测试数据集</p>
-<pre><code>predicted_stock_price = model.predict(x_test)    </code></pre>
-<p>1.10比较模型好坏，利用plt 画出图像的比较。</p>
-
             
             <p class="more">
                 <a href="https://vincen.top/2020/11/10/%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E9%A2%84%E6%B5%8B-tensorflow/">阅读剩下更多</a>
@@ -340,11 +258,6 @@ x_test = np.reshape(x_test, (x_test.shape[0], 11, 1))</code></pre>
                 <p>前段时间购买了一款树莓派 zero，总是闲职起来比较浪费。加之前又增加了太阳能供电。<br>由此有了一个搭建自己服务器的想法。</p>
 <p>需要的硬件 </p>
 <p>树莓派zerow 1块、tf卡 16G等</p>
-<p>安装hexo的文章比较多，再次不在复述。<br>主要的步骤还是按转node.js、然后把代码托管到github上。<br>目前发现一个问题，在解析github.io时，dns解析的地址是127.0.0.1<br>查了下资料，估计是不是太多的ip地址了/?<br>还好自己有一个域名，修改域名的CNAME，以及修改github上的自定义域名就好。<br>###图片测试 url<br>直接复制图片，在此处粘贴，ok</p>
-<p><img src="/images/pasted-0.png" alt="upload successful"></p>
-<p>zero 图片  本地图片》？<br>本地图片不能直接粘贴，需要一个叫图床的东西，先是上传到图床，在复制过来就OK<br>x-special/nautilus-clipboard<br>copy<br>file:///home/vin/Desktop/u=2220831032,2052086614&amp;fm=26&amp;gp=0.jpg</p>
-<p><img src="/images/pasted-1.png" alt="upload successful"></p>
-
             
             <p class="more">
                 <a href="https://vincen.top/2020/11/05/aiecl/">阅读剩下更多</a>
@@ -439,19 +352,6 @@ x_test = np.reshape(x_test, (x_test.shape[0], 11, 1))</code></pre>
         <div class="post-excerpt">
             
                 <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
             
             <p class="more">
                 <a href="https://vincen.top/2020/11/04/hello-world/">阅读剩下更多</a>
@@ -573,7 +473,7 @@ x_test = np.reshape(x_test, (x_test.shape[0], 11, 1))</code></pre>
     <!--博客js脚本 -->
     <!-- 这里放网站js脚本 -->
 
-<script src="/js/main.js?v=1605244154835.js"></script>
+<script src="/js/main.js?v=1605288496401.js"></script>
 
 </body>
 </html>

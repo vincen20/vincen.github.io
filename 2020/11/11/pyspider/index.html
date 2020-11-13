@@ -124,6 +124,8 @@
     <div class="post-content">
         <p>树莓派安装pyspider</p>
 <p>安装pyspider 目的，通过该爬虫，获取一些关注的网站的更新信息，然后通过罗微信进行推送。pyspider 使用起来比较容易，比scrapy简单，直接使用的是网页上调试，编程序。<br>测试的树莓派是 3b+ 系统是 stretch<br>armv7 python3.5</p>
+<a id="more"></a>
+
 <p>1.直接运行指令,系统会自动下载依赖的包。</p>
 <pre><code>pip3 install pyspider</code></pre>
 <p> tips：从下载来看，pip3下载了 tornado, lxml, MarkupSafe, Jinja2, tblib, pycurl, itsdangerous, Werkzeug, click, Flask, cssselect, chardet, pyquery, u-msgpack-python, defusedxml, PyYAML, json5, six, wsgidav, certifi, idna, urllib3, requests, Flask-Login, pyspider等库，比较多。<br> &lt;&gt;但是都是从<a target="_blank" rel="noopener" href="http://www.piwheels.org站点上下载的,速度就是10k/s%EF%BC%8C%E7%A8%8D%E5%BE%AE%E4%B8%80%E4%B8%AA%E8%BF%90%E6%B0%94%E4%B8%8D%E5%A5%BD%E5%B0%B1%E6%98%AF">www.piwheels.org站点上下载的，速度就是10k/s，稍微一个运气不好就是</a> timeout’，这个可以通过2种方式来修改，一是直接使用pip -i参数，指定下载的镜像站点。二是在当前用户目录下（linux测试）mkdir .pip/pip.conf 然后搜索下网页，手动指定下载站点。不用说都明白这两种方式的优缺点，一是零时性的，二是针对当前用户生效的。具体的配置可以通过搜索引擎找到，pip 国内源等关键字。参考：</p>
@@ -378,7 +380,7 @@ pip3 install werkzeug==0.16.1</code></pre>
     <!--博客js脚本 -->
     <!-- 这里放网站js脚本 -->
 
-<script src="/js/main.js?v=1605244154599.js"></script>
+<script src="/js/main.js?v=1605288496175.js"></script>
 
 </body>
 </html>
