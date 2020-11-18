@@ -157,18 +157,6 @@
 [I 201118 20:26:01 result_worker:49] result_worker starting...
 ....</code></pre>
 <p>phantomjs not found.的提示。个人理解，phantomjs是用于渲染js脚本的，如果没有该脚本也是可以运行的，只是不能在抓取数据的时候不能执行js代码。<br>前期探索：之前在phantomjs官网上查找适合树莓派的可执行文件。根据树莓派系统，下载了几个phantomjs版本测试，结果都是不能运行。还以为需要下载原代码，手动编译。<br>在github上找个一个专门针对树莓派的phantomjs库。</p>
-<pre><code>https://github.com/piksel/phantomjs-raspberrypi</code></pre>
-<p>找到这个库后，下载其提供的二进制文件，看了下介绍，该版本对目前所以的版本有效，适合的树莓派版本是<br>armv6l。本人用的树莓派3b+的版本是armv7l。初步猜测是可以兼容的。<br>下载文件，解压，增加x权限，测试。</p>
-<pre><code>pi@raspberrypi:~/Desktop/share $ sudo chmod +x ./phantomjs-bin 
-pi@raspberrypi:~/Desktop/share $ ./phantomjs-bin 
-phantomjs&gt; </code></pre>
-<p>可以看到这个提示的话，应该是运行正常。<br>下一步，需要将phantomjs 所在目录添加到环境变量 随便新建一个目录，将脚本复制过来<br>修改当前用户下的环境变量<br>可以使用 leafpad<br>    leafpad ～/.bashrc<br>    export PATH=$PATH:/home/pi/.local/lib/python3.5/site-packages/phantomjs/</p>
-<p>保存，退出。<br>重新打开一个命令窗口，输入phantomjs，正常使用tab键进行补全。<br>运行正常。<br>运行 pyspider</p>
-<pre><code>pi@raspberrypi:~ $ pyspider 
-phantomjs fetcher running on port 25555
-[I 201118 21:10:45 result_worker:49] result_worker starting...</code></pre>
-<p>ok，安装成功。下一步是对使用了js渲染的网站进行抓取测试。</p>
-
             
             <p class="more">
                 <a href="https://vincen.top/2020/11/18/phantomjs-pyspider-phantomjs/">阅读剩下更多</a>
@@ -304,7 +292,7 @@ phantomjs fetcher running on port 25555
     <!--博客js脚本 -->
     <!-- 这里放网站js脚本 -->
 
-<script src="/js/main.js?v=1605711393337.js"></script>
+<script src="/js/main.js?v=1605711770121.js"></script>
 
 </body>
 </html>
