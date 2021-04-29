@@ -158,19 +158,7 @@
 <pre><code>sudo usermod -a -G dialout $USER</code></pre>
 <p>下载idf</p>
 <pre><code>git clone -b v4.2 --recursive https://github.com/espressif/esp-idf.git</code></pre>
-<p>   设置环境变量</p>
-<p>   打开文件 </p>
-<pre><code>   nano ~/.bashrc
-   alias get_idf=&#39;.$HOME/esp/esp-idf/export.sh&#39;
-export PATH=&quot;/home/vin/esp/esp-idf/components/esptool_py/esptool:$PATH&quot;
-export PATH=&quot;/home/vin/esp/esp-idf/tools:$PATH&quot;
-export PATH=&quot;/home/vin/esp/xtensa-esp32-elf/bin:$PATH&quot;</code></pre>
-<p>  保存，退出<br>  现在就可以测试了</p>
-<pre><code>  idf.py menuconfig
-idf.py build
-idf.py flash
-idf.py monitor</code></pre>
-
+<p>   设置环境变量<br>
             
             <p class="more">
                 <a href="https://vincen.top/2021/04/29/ubuntu20%E5%AE%89%E8%A3%85ESP-IDF/">阅读剩下更多</a>
@@ -667,7 +655,7 @@ idf.py monitor</code></pre>
     <!--博客js脚本 -->
     <!-- 这里放网站js脚本 -->
 
-<script src="/js/main.js?v=1619704554579.js"></script>
+<script src="/js/main.js?v=1619706074802.js"></script>
 
 </body>
 </html>
